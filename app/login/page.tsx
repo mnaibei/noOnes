@@ -7,7 +7,11 @@ const LoginPage = () => {
   const [clientId] = useState(
     "EWsZlpe6wctFVdSMc4Knt9V8Y4kCDzgYjrLFuhMA8pfZgKpx"
   ); // Replace with your NoOnes client ID
-  const redirectUri = "https://mn20qvr9-3000.uks1.devtunnels.ms/home"; // Replace with your redirect URI
+  const redirectUri1 = "https://mn20qvr9-3000.uks1.devtunnels.ms/home"; // Replace with your redirect URI
+  const redirect_uri2 = "https://no-ones.vercel.app/home";
+  const redirect_uri3 = "http://localhost:3000/home";
+
+  const redirectUri = redirect_uri2;
 
   // console.log("Client ID:", clientId);
 

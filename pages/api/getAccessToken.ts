@@ -13,7 +13,11 @@ export default async function handler(
 
   const clientId = "EWsZlpe6wctFVdSMc4Knt9V8Y4kCDzgYjrLFuhMA8pfZgKpx";
   const clientSecret = "h1aFzTmth0JLP2HdzMvY0IfGZtSsS6A5xnGNN97MjdgOHajk";
-  const redirectUri = "https://mn20qvr9-3000.uks1.devtunnels.ms/home";
+  const redirectUri1 = "https://mn20qvr9-3000.uks1.devtunnels.ms/home"; // Replace with your redirect URI
+  const redirect_uri2 = "https://no-ones.vercel.app/home";
+  const redirect_uri3 = "http://localhost:3000/home";
+
+  const redirectUri = redirect_uri2;
 
   const body = new URLSearchParams();
   body.append("grant_type", "authorization_code");
