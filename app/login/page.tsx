@@ -20,11 +20,13 @@ const LoginPage = () => {
   };
 
   return (
-    <button
-      className="noones-login-button border-4 border-red-500 w-300 h-300"
-      onClick={handleLogin}>
-      Sign up with NoOnes
-    </button>
+    <div className=" h-screen flex items-center justify-center">
+      <button
+        className="noones-login-button border-2 border-red-500 w-300 h-300 w-56 p-2 rounded"
+        onClick={handleLogin}>
+        Sign up with NoOnes
+      </button>
+    </div>
   );
 };
 
