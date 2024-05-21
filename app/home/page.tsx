@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import PaymentMethods from "../payment/page";
+import CreateOffer from "../create-offer/page";
 
 export default function Home() {
   const [accessToken, setAccessToken] = useState<string | undefined>(
@@ -87,7 +88,8 @@ export default function Home() {
           </div>
         )}
       </div>
-      <PaymentMethods />
+      {/* <PaymentMethods /> */}
+      <CreateOffer />
     </>
   );
 }
