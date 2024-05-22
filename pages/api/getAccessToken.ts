@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { redirect } from "next/dist/server/api-utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,7 +18,7 @@ export default async function handler(
   const redirect_uri2 = "https://no-ones.vercel.app/home";
   const redirect_uri3 = "http://localhost:3000/home";
 
-  const redirectUri = redirectUri1;
+  const redirectUri = redirect_uri2;
 
   const body = new URLSearchParams();
   body.append("grant_type", "authorization_code");
