@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import PaymentMethods from "../payment/page";
 import CreateOffer from "../create-offer/page";
 import Offers from "../fetch-offers/page";
+import OffersList from "../list-users-offers/page";
 
 export default function Home() {
   const [accessToken, setAccessToken] = useState<string | undefined>(
@@ -20,11 +21,26 @@ export default function Home() {
     router.push("/login");
   };
 
+  const api = axios.create();
+
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      console.error("API error:", error.response?.message || error.message);
+      // if (error.response?.status === 500) {
+      //   console.error("Server error. Logging out.");
+      //   logout();
+      //   alert("Your session has expired. Please log in again.");
+      // }
+      return Promise.reject(error);
+    }
+  );
+
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
 
     if (!accessToken && code) {
-      axios
+      api
         .post("/api/getAccessToken", { code })
         .then((response) => {
           const accessToken = response.data.access_token;
@@ -38,14 +54,12 @@ export default function Home() {
   useEffect(() => {
     if (!accessToken) return;
 
-    axios
+    api
       .post("/api/getUserInfo", { accessToken })
       .then((response) => {
         setUserInfo(response.data);
       })
-      .catch((error) => {
-        console.error("Error fetching user info:", error);
-      });
+      .catch((error) => console.error("Error fetching user info:", error));
   }, [accessToken]);
 
   return (
@@ -89,8 +103,13 @@ export default function Home() {
           </div>
         )}
       </div>
-      <CreateOffer />
-      <Offers />
+      {userInfo && (
+        <>
+          <CreateOffer />
+          <Offers />
+          <OffersList />
+        </>
+      )}
     </>
   );
 }

@@ -13,8 +13,6 @@ const LoginPage = () => {
 
   const redirectUri = redirect_uri2;
 
-  // console.log("Client ID:", clientId);
-
   const handleLogin = () => {
     const authorizationUrl = `https://auth.noones.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=READ`; // Add desired scopes
 
