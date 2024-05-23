@@ -23,18 +23,19 @@ export default function Home() {
 
   const api = axios.create();
 
-  api.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      console.error("API error:", error.response?.message || error.message);
-      // if (error.response?.status === 500) {
-      //   console.error("Server error. Logging out.");
-      //   logout();
-      //   alert("Your session has expired. Please log in again.");
-      // }
-      return Promise.reject(error);
-    }
-  );
+  // api.interceptors.response.use(
+  //   (response) => response,
+  //   (error) => {
+  //     console.error("API error:", error.response?.data);
+  //     if (error.response?.data) {
+  //       console.log("WTF!!!!!!!!");
+  //       console.error("Server error. Logging out.");
+  //       // logout();
+  //       alert("Your session has expired. Please log in again.");
+  //     }
+  //     return Promise.reject(error);
+  //   }
+  // );
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
@@ -105,9 +106,9 @@ export default function Home() {
       </div>
       {userInfo && (
         <>
-          <CreateOffer />
           <Offers />
           <OffersList />
+          <CreateOffer />
         </>
       )}
     </>

@@ -68,36 +68,40 @@ function OffersList() {
 
   return (
     <>
-      <div className="border-2 border-red-500 p-2 m-2 flex flex-col gap-4">
-        <h1>My Offers</h1>
-        <div className="flex gap-4">
+      <div className="p-2 m-2 flex flex-col gap-4">
+        <h1 className="font-bold text-2xl flex justify-center">My Offers</h1>
+        <div className="flex gap-4 m-2">
           <button onClick={() => setOfferType("buy")}>Show Buy Offers</button>
           <button onClick={() => setOfferType("sell")}>Show Sell Offers</button>
         </div>
-        {filteredOffers.length > 0 ? (
-          filteredOffers.map((offer) => (
-            <div key={offer.offer_hash} className="p-2 m-2 flex flex-col gap-2">
-              <p>Type: {offer.offer_type}</p>
-              <p>Payment Window: {offer.payment_window} Min</p>
-              <p>Price per BTC: {offer.fiat_price_per_btc}</p>
-              <p>Token: {offer.crypto_currency}</p>
-              <p>Payment Method: {offer.payment_method_name}</p>
-              <p>Terms: {offer.offer_terms}</p>
-              <a
-                href={offer.offer_link}
-                className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
-                View Offer
-              </a>
-              <button
-                onClick={() => deleteOffer(offer.offer_hash)}
-                className="border-2 rounded border-red-500 bg-red-500 p-2 text-center">
-                Delete Offer
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>You have no offers yet.</p>
-        )}
+        <div className="grid grid-cols-3">
+          {filteredOffers.length > 0 ? (
+            filteredOffers.map((offer) => (
+              <div
+                key={offer.offer_hash}
+                className="p-2 m-2 flex flex-col gap-2 border-2 border-black">
+                <p>Type: {offer.offer_type}</p>
+                <p>Payment Window: {offer.payment_window} Min</p>
+                <p>Price per BTC: {offer.fiat_price_per_btc}</p>
+                <p>Token: {offer.crypto_currency}</p>
+                <p>Payment Method: {offer.payment_method_name}</p>
+                <p>Terms: {offer.offer_terms}</p>
+                <a
+                  href={offer.offer_link}
+                  className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
+                  View Offer
+                </a>
+                <button
+                  onClick={() => deleteOffer(offer.offer_hash)}
+                  className="border-2 rounded border-red-500 bg-red-500 p-2 text-center">
+                  Delete Offer
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>You have no offers yet.</p>
+          )}
+        </div>
       </div>
     </>
   );

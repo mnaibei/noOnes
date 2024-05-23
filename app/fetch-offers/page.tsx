@@ -43,7 +43,8 @@ function Offers() {
 
   return (
     <>
-      <div className="p-2 m-2 flex gap-4 items-center">
+      <h1 className="font-bold text-2xl flex justify-center">Marketplace</h1>
+      <div className="p-2 m-2 flex gap-4 items-center justify-center">
         <label>
           Offer Type:
           <select
