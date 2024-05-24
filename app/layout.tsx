@@ -4,13 +4,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import "./globals.css";
-import { createContext, useContext } from "react";
 import Head from "next/head";
 import Nav from "@/components/Nav";
-
-export const UserContext = createContext<{ userInfo: any; logout: () => void }>(
-  { userInfo: null, logout: () => {} }
-);
+import { UserContext } from "@/utils/UserContext";
 
 export default function RootLayout({
   children,
