@@ -1,9 +1,9 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import Nav from "@/components/Nav";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { UserContext } from "@/utils/UserContext";
 
 interface OfferDetails {
   offer_hash: string;
@@ -24,6 +24,7 @@ export default function OfferDetails() {
   const offerId = params?.offerId as string;
   const [offerDetails, setOfferDetails] = useState<OfferDetails | null>(null);
   const access_token = Cookies.get("access_token");
+  const { userInfo } = useContext(UserContext);
 
   useEffect(() => {
     if (offerId) {
@@ -50,24 +51,28 @@ export default function OfferDetails() {
 
   return (
     <>
-      <div className="border-2 border-red-500 p-2 m-2">
-        <h1>Offer Details</h1>
-        <p>Offer Type: {offerDetails.offer_type}</p>
-        <p>Payment Window: {offerDetails.payment_window} Min</p>
-        <p>Currency Code: {offerDetails.currency_code}</p>
-        <p>Price per BTC: {offerDetails.fiat_price_per_btc}</p>
-        <p>Payment Method: {offerDetails.payment_method_name}</p>
-        <p>Minimum Amount: KES {offerDetails.fiat_amount_range_min}</p>
-        <p>Maximum Amount: KES {offerDetails.fiat_amount_range_max}</p>
-        <p>Offer Owner: {offerDetails.offer_owner_username}</p>
-        <p>Offer Terms: {offerDetails.offer_terms}</p>
-        <a
-          href={offerDetails.offer_link}
-          target="_blank"
-          rel="noopener noreferrer">
-          View Offer
-        </a>
-      </div>
+      {userInfo && (
+        <>
+          <div className="border-2 border-red-500 p-2 m-2">
+            <h1>Offer Details</h1>
+            <p>Offer Type: {offerDetails.offer_type}</p>
+            <p>Payment Window: {offerDetails.payment_window} Min</p>
+            <p>Currency Code: {offerDetails.currency_code}</p>
+            <p>Price per BTC: {offerDetails.fiat_price_per_btc}</p>
+            <p>Payment Method: {offerDetails.payment_method_name}</p>
+            <p>Minimum Amount: KES {offerDetails.fiat_amount_range_min}</p>
+            <p>Maximum Amount: KES {offerDetails.fiat_amount_range_max}</p>
+            <p>Offer Owner: {offerDetails.offer_owner_username}</p>
+            <p>Offer Terms: {offerDetails.offer_terms}</p>
+            <a
+              href={offerDetails.offer_link}
+              target="_blank"
+              rel="noopener noreferrer">
+              View Offer
+            </a>
+          </div>
+        </>
+      )}
     </>
   );
 }
