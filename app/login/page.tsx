@@ -7,8 +7,8 @@ const LoginPage = () => {
   const [clientId] = useState(
     "EWsZlpe6wctFVdSMc4Knt9V8Y4kCDzgYjrLFuhMA8pfZgKpx"
   );
-  const redirectUri1 = "https://mn20qvr9-3000.uks1.devtunnels.ms/home";
-  const redirect_uri2 = "https://no-ones.vercel.app/home";
+  const redirectUri1 = "https://mn20qvr9-3000.uks1.devtunnels.ms/";
+  const redirect_uri2 = "https://no-ones.vercel.app/";
   const redirect_uri3 = "http://localhost:3000/home";
 
   const redirectUri = redirect_uri2;
@@ -26,7 +26,7 @@ const LoginPage = () => {
       <button
         className="noones-login-button border-2 border-red-500 w-300 h-300 w-56 p-2 rounded"
         onClick={handleLogin}>
-        Sign up with NoOnes
+        Sign in with NoOnes
       </button>
     </div>
   );

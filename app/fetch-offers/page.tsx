@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -23,6 +24,7 @@ function Offers() {
   const [coin, setCoin] = useState("");
   const [offers, setOffers] = useState<Offer[]>([]);
   const access_token = Cookies.get("access_token");
+  const router = useRouter();
 
   const fetchOffers = async () => {
     try {
@@ -102,11 +104,16 @@ function Offers() {
             <p>Minimum amount: KES {offer.fiat_amount_range_min}</p>
             <p>Maximum amount: KES {offer.fiat_amount_range_max}</p>
             <p>Offer Owner: {offer.offer_owner_username}</p>
-            <a
+            {/* <a
               href={offer.offer_link}
               className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
               View Offer
-            </a>
+            </a> */}
+            <button
+              onClick={() => router.push(`/offer-details/${offer.offer_id}`)}
+              className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
+              View Offer
+            </button>
           </div>
         ))}
       </div>

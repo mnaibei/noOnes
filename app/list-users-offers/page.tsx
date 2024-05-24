@@ -1,5 +1,6 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -19,6 +20,7 @@ function OffersList() {
   const [offers, setOffers] = useState<MyOffer[]>([]);
   const [offerType, setOfferType] = useState<"buy" | "sell">("buy");
   const accessToken = Cookies.get("access_token");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -86,11 +88,13 @@ function OffersList() {
                 <p>Token: {offer.crypto_currency}</p>
                 <p>Payment Method: {offer.payment_method_name}</p>
                 <p>Terms: {offer.offer_terms}</p>
-                <a
-                  href={offer.offer_link}
+                <button
+                  onClick={() =>
+                    router.push(`/offer-details/${offer.offer_id}`)
+                  }
                   className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
                   View Offer
-                </a>
+                </button>
                 <button
                   onClick={() => deleteOffer(offer.offer_hash)}
                   className="border-2 rounded border-red-500 bg-red-500 p-2 text-center">
