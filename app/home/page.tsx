@@ -42,7 +42,7 @@ export default function Home() {
 
     if (!accessToken && code) {
       api
-        .post("/api/getAccessToken", { code })
+        .post("/api/auth/getAccessToken", { code })
         .then((response) => {
           const accessToken = response.data.access_token;
           Cookies.set("access_token", accessToken);
@@ -56,7 +56,7 @@ export default function Home() {
     if (!accessToken) return;
 
     api
-      .post("/api/getUserInfo", { accessToken })
+      .post("/api/auth/getUserInfo", { accessToken })
       .then((response) => {
         setUserInfo(response.data);
       })

@@ -23,7 +23,7 @@ function OffersList() {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await axios.post("/api/listOffers", {
+        const response = await axios.post("/api/offers/listOffers", {
           accessToken: accessToken,
         });
 
@@ -45,7 +45,7 @@ function OffersList() {
   const deleteOffer = async (offer_hash: string) => {
     try {
       console.log("Deleting offer:", offer_hash);
-      const response = await axios.post("/api/deleteOffer", {
+      const response = await axios.post("/api/offers/deleteOffer", {
         accessToken: accessToken,
         offer_hash: offer_hash,
       });

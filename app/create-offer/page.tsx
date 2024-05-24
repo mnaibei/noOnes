@@ -33,7 +33,7 @@ const CreateOffer = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/api/createOffer", {
+      const response = await axios.post("/api/offers/createOffer", {
         accessToken: access_token,
         offerData,
       });

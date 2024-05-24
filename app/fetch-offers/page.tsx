@@ -26,7 +26,7 @@ function Offers() {
 
   const fetchOffers = async () => {
     try {
-      const response = await axios.post("/api/getOffers", {
+      const response = await axios.post("/api/offers/getOffers", {
         accessToken: access_token,
         offerParams: {
           offer_type: offerType,
