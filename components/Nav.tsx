@@ -1,20 +1,25 @@
+import { useRouter } from "next/navigation";
 interface UserNavProps {
   userInfo: any;
   onLogout: () => void;
 }
 
 const Nav: React.FC<UserNavProps> = ({ userInfo, onLogout }) => {
+  const router = useRouter();
   return (
     <div>
       <div className="flex justify-between p-2 m-2">
-        <h1 className="font-bold text-2xl flex items-center justify-center gap-4">
-          <img
-            src={userInfo.data.avatar_url}
-            alt={userInfo.data.username}
-            className="w-16 h-16 rounded-full"
-          />
-          <span className="text-green-500 ">{userInfo.data.username}</span>
-        </h1>
+        <div className="flex items-center justify-between gap-4 w-1/4 ">
+          <h1 className="font-bold text-2xl flex items-center gap-4">
+            <img
+              src={userInfo.data.avatar_url}
+              alt={userInfo.data.username}
+              className="w-16 h-16 rounded-full"
+            />
+            <span className="text-green-500 ">{userInfo.data.username}</span>
+          </h1>
+          <button onClick={() => router.push("/")}>Home</button>
+        </div>
         <button
           onClick={onLogout}
           className="border-2 border-red-500 w-36 rounded">
