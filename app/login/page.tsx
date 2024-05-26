@@ -11,7 +11,7 @@ const LoginPage = () => {
   const redirect_uri2 = "https://no-ones.vercel.app/";
   const redirect_uri3 = "http://localhost:3000/home";
 
-  const redirectUri = redirectUri1;
+  const redirectUri = redirect_uri2;
 
   const handleLogin = () => {
     const authorizationUrl = `https://auth.noones.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=READ`; // Add desired scopes
