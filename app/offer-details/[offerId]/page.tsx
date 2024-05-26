@@ -4,32 +4,12 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "@/utils/UserContext";
-
-interface OfferDetails {
-  offer_hash: string;
-  fiat_price_per_crypto: number;
-  offer_type: string;
-  payment_window: number;
-  currency_code: string;
-  payment_method_name: string;
-  fiat_amount_range_min: number;
-  fiat_amount_range_max: number;
-  offer_owner_username: string;
-  offer_terms: string;
-  crypto_currency_code: string;
-  payment_method_label: string;
-  offer_owner_feedback_positive: number;
-  offer_owner_feedback_negative: number;
-  monthly_trade_stats: {
-    trades_count_total: number;
-    trades_percent_success: number;
-  };
-}
+import { OffersDetails } from "@/utils/interface/OfferDetails";
 
 export default function OfferDetails() {
   const params = useParams();
   const offerId = params?.offerId as string;
-  const [offerDetails, setOfferDetails] = useState<OfferDetails | null>(null);
+  const [offerDetails, setOfferDetails] = useState<OffersDetails | null>(null);
   const access_token = Cookies.get("access_token");
   const { userInfo } = useContext(UserContext);
   const [payAmount, setPayAmount] = useState("");
@@ -113,6 +93,15 @@ export default function OfferDetails() {
   };
 
   console.log("offer hash", offerDetails.offer_hash);
+  console.log("user info", userInfo);
+
+  if (userInfo.data.username === offerDetails.offer_owner_username) {
+    return (
+      <p className="text-red-500 p-2 m-2">
+        Oops! You can&apos;t start a trade on your own offer.
+      </p>
+    );
+  }
 
   return (
     <>

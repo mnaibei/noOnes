@@ -3,19 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-
-interface Offer {
-  offer_id: string;
-  offer_type: string;
-  payment_window: number;
-  currency_code: string;
-  fiat_price_per_btc: number;
-  payment_method_name: string;
-  fiat_amount_range_min: number;
-  fiat_amount_range_max: number;
-  offer_owner_username: string;
-  offer_link: string;
-}
+import { Offer } from "@/utils/interface/Offer";
 
 function Offers() {
   const [offerType, setOfferType] = useState("buy");
