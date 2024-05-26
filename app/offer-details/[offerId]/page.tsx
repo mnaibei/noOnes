@@ -1,11 +1,12 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "@/utils/UserContext";
 
 interface OfferDetails {
+  offer_hash: string;
   fiat_price_per_crypto: number;
   offer_type: string;
   payment_window: number;
@@ -34,6 +35,7 @@ export default function OfferDetails() {
   const [payAmount, setPayAmount] = useState("");
   const [receiveAmount, setReceiveAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (offerId) {
@@ -86,13 +88,31 @@ export default function OfferDetails() {
     }
   };
 
-  if (userInfo.data.username === offerDetails.offer_owner_username) {
-    return (
-      <p className="text-red-500 p-2 m-2">
-        Oops! You can&apos;t start a trade on your own offer.
-      </p>
-    );
-  }
+  const handleStartTrade = async () => {
+    try {
+      const payload = {
+        offer_hash: offerDetails.offer_hash,
+        fiat: Number(payAmount),
+      };
+
+      console.log("Sending to API:", payload);
+
+      const response = await axios.post("/api/trade/startTrade", payload, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      console.log(response.data);
+      router.push(
+        `/trade/${offerDetails.offer_hash}?payAmount=${payAmount}&receiveAmount=${receiveAmount}`
+      );
+    } catch (error) {
+      console.error("Failed to start trade:", error);
+    }
+  };
+
+  console.log("offer hash", offerDetails.offer_hash);
 
   return (
     <>
@@ -133,6 +153,11 @@ export default function OfferDetails() {
                 />{" "}
                 {offerDetails.crypto_currency_code}
               </div>
+              <button
+                onClick={handleStartTrade}
+                className="border-2 border-green-500 p-2 rounded w-1/2">
+                Start Trade
+              </button>
             </div>
             <div className="border-2 border-green-500 p-2 m-2 gap-4">
               <h2 className="p-2">About this offer</h2>

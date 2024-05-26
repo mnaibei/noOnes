@@ -84,7 +84,13 @@ function OffersList() {
                 className="p-2 m-2 flex flex-col gap-2 border-2 border-black">
                 <p>Type: {offer.offer_type}</p>
                 <p>Payment Window: {offer.payment_window} Min</p>
-                <p>Price per BTC: {offer.fiat_price_per_btc}</p>
+                <p>
+                  Price per BTC:{" "}
+                  {Number(offer.fiat_price_per_btc).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </p>
                 <p>Token: {offer.crypto_currency}</p>
                 <p>Payment Method: {offer.payment_method_name}</p>
                 <p>Terms: {offer.offer_terms}</p>

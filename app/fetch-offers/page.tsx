@@ -99,16 +99,23 @@ function Offers() {
             {/* <h2>{offer.offer_type}</h2> */}
             <p>Payment Window: {offer.payment_window} Min</p>
             <p>Currency Code: {offer.currency_code}</p>
-            <p>Price per BTC: {offer.fiat_price_per_btc}</p>
+            <p>
+              Price per BTC:{" "}
+              {Number(offer.fiat_price_per_btc).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
             <p>Payment Method: {offer.payment_method_name}</p>
-            <p>Minimum amount: KES {offer.fiat_amount_range_min}</p>
-            <p>Maximum amount: KES {offer.fiat_amount_range_max}</p>
+            <p>
+              Minimum amount: KES{" "}
+              {Number(offer.fiat_amount_range_max).toLocaleString()}
+            </p>
+            <p>
+              Maximum amount: KES{" "}
+              {Number(offer.fiat_amount_range_max).toLocaleString()}
+            </p>
             <p>Offer Owner: {offer.offer_owner_username}</p>
-            {/* <a
-              href={offer.offer_link}
-              className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
-              View Offer
-            </a> */}
             <button
               onClick={() => router.push(`/offer-details/${offer.offer_id}`)}
               className="border-2 rounded border-green-200 bg-green-500 p-2 text-center">
