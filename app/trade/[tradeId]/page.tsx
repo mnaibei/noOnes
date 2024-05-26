@@ -18,6 +18,7 @@ export default function TradePage() {
   const searchParams = useSearchParams();
   const payAmount = searchParams?.get("payAmount");
   const receiveAmount = searchParams?.get("receiveAmount");
+  const tradeHash = searchParams?.get("tradeHash");
   const access_token = Cookies.get("access_token");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
@@ -45,6 +46,25 @@ export default function TradePage() {
     }
   }, [tradeId, access_token]);
 
+  const handleCancelTrade = async () => {
+    try {
+      const response = await axios.post(
+        "/api/trade/cancelTrade",
+        { trade_hash: tradeHash },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+
+      console.log(response.data);
+      // Handle successful trade cancellation
+    } catch (error) {
+      console.error("Failed to cancel trade:", error);
+    }
+  };
+
   return (
     <>
       {userInfo && (
@@ -53,7 +73,15 @@ export default function TradePage() {
           <p>Offer ID: {tradeId}</p>
           <p>Pay Amount: {payAmount}</p>
           <p>Receive Amount: {receiveAmount}</p>
-          <div>
+
+          <p>Trade hash: {tradeHash}</p>
+          <button
+            className="border-2 rounded border-red-200 bg-red-500 p-2 text-center"
+            onClick={handleCancelTrade}>
+            Cancel Trade
+          </button>
+
+          {/* <div>
             <h2>Chat Messages</h2>
             {chatMessages?.length > 0 ? (
               chatMessages.map((msg, index) => (
@@ -67,7 +95,7 @@ export default function TradePage() {
             ) : (
               <p>No chat messages available.</p>
             )}
-          </div>
+          </div> */}
         </div>
       )}
     </>

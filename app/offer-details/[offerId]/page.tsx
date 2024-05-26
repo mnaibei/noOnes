@@ -81,8 +81,17 @@ export default function OfferDetails() {
         },
       });
 
+      console.log("offer details response", response.data);
+
+      console.log(
+        "offer details trade_hash? this will be fucked up",
+        response.data.data.trade_hash
+      );
+
+      const tradeHash = response.data.data.trade_hash;
+
       router.push(
-        `/trade/${offerDetails.offer_hash}?payAmount=${payAmount}&receiveAmount=${receiveAmount}`
+        `/trade/${tradeHash}?payAmount=${payAmount}&receiveAmount=${receiveAmount}`
       );
     } catch (error) {
       console.error("Failed to start trade:", error);

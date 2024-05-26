@@ -17,14 +17,13 @@ export default async function handler(
   }
 
   const accessToken = authorizationHeader.split(" ")[1];
-  const { offer_hash, fiat } = req.body;
+  const { trade_hash } = req.body;
 
   try {
     const response = await axios.post(
-      "https://api.noones.com/noones/v1/trade/start",
+      "https://api.noones.com/noones/v1/trade/cancel",
       new URLSearchParams({
-        offer_hash,
-        fiat: String(fiat),
+        trade_hash,
       }).toString(),
       {
         headers: {
@@ -35,9 +34,9 @@ export default async function handler(
       }
     );
 
-    res.status(200).json(response.data);
+    res.status(200).json({ message: "Trade cancelled", data: response.data });
   } catch (error) {
-    console.error("Error starting trade:", error);
+    console.error("Error cancelling trade:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
