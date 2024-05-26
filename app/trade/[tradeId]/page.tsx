@@ -1,5 +1,5 @@
 "use client";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/utils/UserContext";
 import Cookies from "js-cookie";
@@ -18,8 +18,9 @@ export default function TradePage() {
   const searchParams = useSearchParams();
   const payAmount = searchParams?.get("payAmount");
   const receiveAmount = searchParams?.get("receiveAmount");
-  const tradeHash = searchParams?.get("tradeHash");
+  // const tradeHash = searchParams?.get("tradeHash");
   const access_token = Cookies.get("access_token");
+  const router = useRouter();
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function TradePage() {
     try {
       const response = await axios.post(
         "/api/trade/cancelTrade",
-        { trade_hash: tradeHash },
+        { trade_hash: tradeId },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -59,7 +60,7 @@ export default function TradePage() {
       );
 
       console.log(response.data);
-      // Handle successful trade cancellation
+      router.push("/");
     } catch (error) {
       console.error("Failed to cancel trade:", error);
     }
@@ -70,11 +71,9 @@ export default function TradePage() {
       {userInfo && (
         <div>
           <h1>Trade Page</h1>
-          <p>Offer ID: {tradeId}</p>
+          <p>Trade Hash: {tradeId}</p>
           <p>Pay Amount: {payAmount}</p>
           <p>Receive Amount: {receiveAmount}</p>
-
-          <p>Trade hash: {tradeHash}</p>
           <button
             className="border-2 rounded border-red-200 bg-red-500 p-2 text-center"
             onClick={handleCancelTrade}>
