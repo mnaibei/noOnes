@@ -83,11 +83,6 @@ export default function OfferDetails() {
 
       console.log("offer details response", response.data);
 
-      console.log(
-        "offer details trade_hash? this will be fucked up",
-        response.data.data.trade_hash
-      );
-
       const tradeHash = response.data.data.trade_hash;
 
       router.push(

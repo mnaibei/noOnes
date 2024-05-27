@@ -23,6 +23,7 @@ function Offers() {
           currency_code: currency,
           payment_method: paymentMethod,
           crypto_currency_code: coin,
+          limit: 300,
         },
       });
       setOffers(response.data.data.offers);
@@ -87,6 +88,7 @@ function Offers() {
             {/* <h2>{offer.offer_type}</h2> */}
             <p>Payment Window: {offer.payment_window} Min</p>
             <p>Currency Code: {offer.currency_code}</p>
+            <p>Token: {offer.crypto_currency_code}</p>
             <p>
               Price per BTC:{" "}
               {Number(offer.fiat_price_per_btc).toLocaleString(undefined, {

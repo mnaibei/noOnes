@@ -14,7 +14,10 @@ const OfferDetailsSection: React.FC<OfferDetailsSectionProps> = ({
       <p>
         Seller rate
         <br />
-        {Number(offerDetails.fiat_price_per_crypto).toFixed(2)}{" "}
+        {Number(offerDetails.fiat_price_per_crypto).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}{" "}
         {offerDetails.currency_code}
       </p>
       <p>

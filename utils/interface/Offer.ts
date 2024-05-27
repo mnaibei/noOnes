@@ -9,4 +9,5 @@ export interface Offer {
   fiat_amount_range_max: number;
   offer_owner_username: string;
   offer_link: string;
+  crypto_currency_code: string;
 }
