@@ -9,7 +9,6 @@ const LoginPage = () => {
   );
   const redirectUri1 = "https://mn20qvr9-3000.uks1.devtunnels.ms/";
   const redirect_uri2 = "https://no-ones.vercel.app/";
-  const redirect_uri3 = "http://localhost:3000/home";
 
   const redirectUri = redirect_uri2;
 

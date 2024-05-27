@@ -4,21 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/utils/UserContext";
 import Cookies from "js-cookie";
 import axios from "axios";
-
-interface ChatMessage {
-  id: string;
-  timestamp: number;
-  type: string;
-  trade_hash: string;
-  is_for_moderator: boolean;
-  author: string | null;
-  security_awareness: string | null;
-  mark_as_read: boolean;
-  status: number;
-  text: string;
-  author_uuid: string | null;
-  sent_by_moderator: boolean;
-}
+import { ChatMessage } from "@/utils/interface/ChatMessage";
 
 export default function TradePage() {
   const params = useParams();
@@ -30,7 +16,7 @@ export default function TradePage() {
   const access_token = Cookies.get("access_token");
   const router = useRouter();
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [Message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchChatMessages = async () => {
@@ -53,6 +39,12 @@ export default function TradePage() {
 
     if (tradeId && access_token) {
       fetchChatMessages();
+
+      // Fetch chat messages periodically
+      const intervalId = setInterval(fetchChatMessages, 5000);
+
+      // Cleanup interval on component unmount
+      return () => clearInterval(intervalId);
     }
   }, [tradeId, access_token]);
 
@@ -96,7 +88,7 @@ export default function TradePage() {
     try {
       const response = await axios.post(
         "/api/trade/postMessage",
-        { tradeHash: tradeId, message: Message },
+        { tradeHash: tradeId, message },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -104,6 +96,19 @@ export default function TradePage() {
         }
       );
       console.log("Message sent successfully:", response.data);
+
+      // Update chat messages state with the new message
+      setChatMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          ...response.data,
+          timestamp: Date.now() / 1000,
+          trade_hash: tradeId,
+          text: message,
+        },
+      ]);
+
+      // Clear the message input
       setMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -114,8 +119,8 @@ export default function TradePage() {
     <>
       {userInfo && (
         <div className="p-2 m-2 flex flex-col gap-2">
-          <h1>Trade Page</h1>
-          <p>Trade Hash: {tradeId}</p>
+          <h1 className="font-bold text-2xl self-center">Trade Page</h1>
+          <p>Trade ID: {tradeId}</p>
           <p>Pay Amount: {payAmount}</p>
           <p>Receive Amount: {receiveAmount}</p>
           <button
@@ -130,7 +135,7 @@ export default function TradePage() {
           </button>
 
           <div>
-            <h2>Chat Messages</h2>
+            <h2 className="font-bold self-center">Chat Messages</h2>
             {chatMessages.length > 0 ? (
               chatMessages.map((msg, index) => (
                 <div key={index} className="border-2 border-gray-300 py-2">
@@ -149,13 +154,18 @@ export default function TradePage() {
               <p>No chat messages available.</p>
             )}
           </div>
-          <div>
+          <div className=" flex flex-col items-center gap-4">
             <textarea
-              value={Message}
+              value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type your message here"
+              className="w-full h-24 border-2 border-gray-300 p-2 rounded"
             />
-            <button onClick={handleSendMessage}>Send Message</button>
+            <button
+              className="border-2 rounded border-green-200 bg-green-500 p-2 text-center"
+              onClick={handleSendMessage}>
+              Send Message
+            </button>
           </div>
         </div>
       )}
