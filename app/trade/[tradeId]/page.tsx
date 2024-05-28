@@ -22,7 +22,7 @@ export default function TradePage() {
     const fetchChatMessages = async () => {
       try {
         const response = await axios.post(
-          "/api/trade/webhook",
+          "/api/trade/chat/getMessage",
           { tradeId },
           {
             headers: {
@@ -87,7 +87,7 @@ export default function TradePage() {
   const handleSendMessage = async () => {
     try {
       const response = await axios.post(
-        "/api/trade/postMessage",
+        "/api/trade/chat/postMessage",
         { tradeHash: tradeId, message },
         {
           headers: {
