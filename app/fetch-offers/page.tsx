@@ -99,7 +99,7 @@ function Offers() {
             <p>Payment Method: {offer.payment_method_name}</p>
             <p>
               Minimum amount: KES{" "}
-              {Number(offer.fiat_amount_range_max).toLocaleString()}
+              {Number(offer.fiat_amount_range_min).toLocaleString()}
             </p>
             <p>
               Maximum amount: KES{" "}
