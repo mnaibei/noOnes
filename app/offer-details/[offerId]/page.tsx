@@ -93,7 +93,10 @@ export default function OfferDetails() {
     }
   };
 
-  if (userInfo.data.username === offerDetails.offer_owner_username) {
+  if (
+    userInfo &&
+    userInfo.data.username === offerDetails.offer_owner_username
+  ) {
     return (
       <p className="text-red-500 p-2 m-2">
         Oops! You can&apos;t start a trade on your own offer.

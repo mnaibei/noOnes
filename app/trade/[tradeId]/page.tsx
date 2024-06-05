@@ -11,12 +11,15 @@ export default function TradePage() {
   const tradeId = params?.tradeId as string;
   const { userInfo } = useContext(UserContext);
   const searchParams = useSearchParams();
-  const payAmount = searchParams?.get("payAmount");
+  const buyer = searchParams?.get("buyer");
   const receiveAmount = searchParams?.get("receiveAmount");
   const access_token = Cookies.get("access_token");
   const router = useRouter();
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState("");
+
+  console.log("buyer sent from active trade component", buyer);
+  console.log("Current user username", userInfo.data.username);
 
   useEffect(() => {
     const fetchChatMessages = async () => {
@@ -84,6 +87,24 @@ export default function TradePage() {
     }
   };
 
+  //this is a mock function, it does not work
+  const handleSendToken = async () => {
+    try {
+      const response = await axios.post(
+        "/api/trade/sendToken",
+        { trade_hash: tradeId },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Failed to send token:", error);
+    }
+  };
+
   const handleSendMessage = async () => {
     try {
       const response = await axios.post(
@@ -120,19 +141,30 @@ export default function TradePage() {
       {userInfo && (
         <div className="p-2 m-2 flex flex-col gap-2">
           <h1 className="font-bold text-2xl self-center">Trade Page</h1>
-          <p>Trade ID: {tradeId}</p>
-          <p>Pay Amount: {payAmount}</p>
-          <p>Receive Amount: {receiveAmount}</p>
-          <button
-            className="border-2 rounded border-red-200 bg-red-500 p-2 text-center"
-            onClick={handleCancelTrade}>
-            Cancel Trade
-          </button>
-          <button
-            className="border-2 rounded border-green-200 bg-green-500 p-2 text-center"
-            onClick={handleCompletedTrade}>
-            Mark Trade as Paid
-          </button>
+          <p className="font-bold">Trade ID: {tradeId}</p>
+          {/* <p>Pay Amount: {payAmount}</p>
+          <p>Receive Amount: {receiveAmount}</p> */}
+
+          {userInfo.data.username === buyer ? (
+            <>
+              <button
+                className="border-2 rounded border-red-200 bg-red-500 p-2 text-center"
+                onClick={handleCancelTrade}>
+                Cancel Trade
+              </button>
+              <button
+                className="border-2 rounded border-green-200 bg-green-500 p-2 text-center"
+                onClick={handleCompletedTrade}>
+                Mark Trade as Paid
+              </button>
+            </>
+          ) : (
+            <button
+              className="border-2 rounded border-green-200 bg-green-500 p-2 text-center"
+              onClick={handleSendToken}>
+              Send Token
+            </button>
+          )}
 
           <div>
             <h2 className="font-bold self-center">Chat Messages</h2>
@@ -154,7 +186,7 @@ export default function TradePage() {
               <p>No chat messages available.</p>
             )}
           </div>
-          <div className=" flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4">
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}

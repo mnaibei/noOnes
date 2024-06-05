@@ -5,6 +5,7 @@ import Offers from "./fetch-offers/page";
 import OffersList from "./list-users-offers/page";
 import { UserContext } from "@/utils/UserContext";
 import UserTrades from "./get-user-trades/page";
+import ActiveTrades from "./active-trades/page";
 
 export default function Home() {
   const { userInfo } = useContext(UserContext);
@@ -17,6 +18,7 @@ export default function Home() {
         <>
           <Offers />
           <OffersList />
+          <ActiveTrades />
           <CreateOffer />
           <UserTrades />
         </>

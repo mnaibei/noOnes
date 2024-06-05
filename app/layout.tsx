@@ -17,11 +17,11 @@ export default function RootLayout({
   const [userInfo, setUserInfo] = useState<any>(null);
   const router = useRouter();
 
-  const logout = () => {
+  const logout = async () => {
+    await router.push("/login");
     Cookies.remove("access_token");
     setAccessToken(undefined);
     setUserInfo(null); // clear user info
-    router.push("/login");
   };
 
   const api = axios.create();
