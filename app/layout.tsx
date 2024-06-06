@@ -15,6 +15,7 @@ export default function RootLayout({
     Cookies.get("access_token")
   );
   const [userInfo, setUserInfo] = useState<any>(null);
+  const [walletSummary, setWalletSummary] = useState<any>(null);
   const router = useRouter();
 
   const logout = async () => {
@@ -22,6 +23,7 @@ export default function RootLayout({
     Cookies.remove("access_token");
     setAccessToken(undefined);
     setUserInfo(null); // clear user info
+    setWalletSummary(null); // clear wallet summary
   };
 
   const api = axios.create();
@@ -52,6 +54,22 @@ export default function RootLayout({
       .catch((error) => console.error("Error fetching user info:", error));
   }, [accessToken]);
 
+  useEffect(() => {
+    if (!accessToken) return;
+
+    api
+      .get("/api/wallet/getWalletSummary", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setWalletSummary(response.data);
+        console.log("Wallet summary:", response.data);
+      })
+      .catch((error) => console.error("Error fetching wallet summary:", error));
+  }, [accessToken]);
+
   return (
     <html>
       <Head>
@@ -59,7 +77,13 @@ export default function RootLayout({
       </Head>
       <body>
         <UserContext.Provider value={{ userInfo, logout }}>
-          {userInfo && <Nav userInfo={userInfo} onLogout={logout} />}
+          {userInfo && (
+            <Nav
+              userInfo={userInfo}
+              onLogout={logout}
+              walletSummary={walletSummary}
+            />
+          )}
           {children}
         </UserContext.Provider>
       </body>
