@@ -17,6 +17,7 @@ export default function TradePage() {
   const router = useRouter();
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState("");
+  const [twoFaToken, setTwoFaToken] = useState(""); // Assuming 2FA token is available
 
   console.log("buyer sent from active trade component", buyer);
   console.log("Current user username", userInfo.data.username);
@@ -87,21 +88,21 @@ export default function TradePage() {
     }
   };
 
-  //this is a mock function, it does not work
-  const handleSendToken = async () => {
+  const handleReleaseCrypto = async () => {
     try {
       const response = await axios.post(
-        "/api/trade/sendToken",
+        "/api/trade/releaseToken",
         { trade_hash: tradeId },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
+            "x-paxful-2fa": twoFaToken, // Include 2FA token
           },
         }
       );
       console.log(response.data);
     } catch (error) {
-      console.error("Failed to send token:", error);
+      console.error("Failed to release crypto:", error);
     }
   };
 
@@ -142,8 +143,6 @@ export default function TradePage() {
         <div className="p-2 m-2 flex flex-col gap-2">
           <h1 className="font-bold text-2xl self-center">Trade Page</h1>
           <p className="font-bold">Trade ID: {tradeId}</p>
-          {/* <p>Pay Amount: {payAmount}</p>
-          <p>Receive Amount: {receiveAmount}</p> */}
 
           {userInfo.data.username === buyer ? (
             <>
@@ -159,11 +158,24 @@ export default function TradePage() {
               </button>
             </>
           ) : (
-            <button
-              className="border-2 rounded border-green-200 bg-green-500 p-2 text-center"
-              onClick={handleSendToken}>
-              Send Token
-            </button>
+            <>
+              <button
+                className="border-2 rounded border-green-200 bg-green-500 p-2 text-center"
+                onClick={handleReleaseCrypto}>
+                Send Token
+              </button>
+              <p className="mt-2">
+                If you have Two Factor authentication enabled please enter the
+                codde below
+              </p>
+              <input
+                type="text"
+                value={twoFaToken}
+                onChange={(e) => setTwoFaToken(e.target.value)}
+                placeholder="Enter 2FA Token"
+                className="border p-2 rounded mt-2"
+              />
+            </>
           )}
 
           <div>
