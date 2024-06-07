@@ -17,7 +17,7 @@ export default function TradePage() {
   const router = useRouter();
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState("");
-  const [twoFaToken, setTwoFaToken] = useState(""); // Assuming 2FA token is available
+  const [twoFaToken, setTwoFaToken] = useState(""); // Assuming 2FA token has been set by the user
 
   console.log("buyer sent from active trade component", buyer);
   console.log("Current user username", userInfo.data.username);

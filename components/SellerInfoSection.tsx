@@ -1,8 +1,8 @@
 import React from "react";
-import { OffersDetails } from "@/utils/interface/OfferDetails";
+import { Offer } from "@/utils/interface/Offer";
 
 interface SellerInfoSectionProps {
-  offerDetails: OffersDetails;
+  offerDetails: Offer;
 }
 
 const SellerInfoSection: React.FC<SellerInfoSectionProps> = ({

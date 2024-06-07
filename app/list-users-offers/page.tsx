@@ -3,10 +3,10 @@ import React, { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { MyOffer } from "@/utils/interface/MyOffer";
+import { Offer } from "@/utils/interface/Offer";
 
 function OffersList() {
-  const [offers, setOffers] = useState<MyOffer[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
   const [offerType, setOfferType] = useState<"buy" | "sell">("buy");
   const accessToken = Cookies.get("access_token");
   const router = useRouter();

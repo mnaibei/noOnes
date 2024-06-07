@@ -4,7 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { UserContext } from "@/utils/UserContext";
-import { OffersDetails } from "@/utils/interface/OfferDetails";
+import { Offer } from "@/utils/interface/Offer";
 import OfferHeader from "@/components/OfferHeader";
 import PaymentInputs from "@/components/PaymentInputs";
 import OfferDetailsSection from "@/components/OfferDetailsSection";
@@ -13,7 +13,7 @@ import SellerInfoSection from "@/components/SellerInfoSection";
 export default function OfferDetails() {
   const params = useParams();
   const offerId = params?.offerId as string;
-  const [offerDetails, setOfferDetails] = useState<OffersDetails | null>(null);
+  const [offerDetails, setOfferDetails] = useState<Offer | null>(null);
   const access_token = Cookies.get("access_token");
   const { userInfo } = useContext(UserContext);
   const [payAmount, setPayAmount] = useState("");
