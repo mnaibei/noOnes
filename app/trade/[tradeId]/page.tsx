@@ -165,8 +165,8 @@ export default function TradePage() {
                 Send Token
               </button>
               <p className="mt-2">
-                If you have Two Factor authentication enabled please enter the
-                codde below
+                If you have Two Factor Authentication enabled please enter the
+                code below
               </p>
               <input
                 type="text"

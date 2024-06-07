@@ -29,45 +29,44 @@ export default function RootLayout({
   const api = axios.create();
 
   useEffect(() => {
-    const code = new URL(window.location.href).searchParams.get("code");
+    const fetchData = async () => {
+      const code = new URL(window.location.href).searchParams.get("code");
 
-    if (!accessToken && code) {
-      api
-        .post("/api/auth/getAccessToken", { code })
-        .then((response) => {
+      if (!accessToken && code) {
+        try {
+          const response = await api.post("/api/auth/getAccessToken", { code });
           const accessToken = response.data.access_token;
           Cookies.set("access_token", accessToken);
           setAccessToken(accessToken);
-        })
-        .catch((error) => console.error("Error fetching access token:", error));
-    }
-  }, [accessToken]);
+        } catch (error) {
+          console.error("Error fetching access token:", error);
+        }
+      }
 
-  useEffect(() => {
-    if (!accessToken) return;
+      if (accessToken) {
+        try {
+          const userInfoResponse = await api.post("/api/auth/getUserInfo", {
+            accessToken,
+          });
+          setUserInfo(userInfoResponse.data);
 
-    api
-      .post("/api/auth/getUserInfo", { accessToken })
-      .then((response) => {
-        setUserInfo(response.data);
-      })
-      .catch((error) => console.error("Error fetching user info:", error));
-  }, [accessToken]);
+          const walletSummaryResponse = await api.get(
+            "/api/wallet/getWalletSummary",
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          setWalletSummary(walletSummaryResponse.data);
+          console.log("Wallet summary:", walletSummaryResponse.data);
+        } catch (error) {
+          console.error("Error fetching user info or wallet summary:", error);
+        }
+      }
+    };
 
-  useEffect(() => {
-    if (!accessToken) return;
-
-    api
-      .get("/api/wallet/getWalletSummary", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        setWalletSummary(response.data);
-        console.log("Wallet summary:", response.data);
-      })
-      .catch((error) => console.error("Error fetching wallet summary:", error));
+    fetchData();
   }, [accessToken]);
 
   return (

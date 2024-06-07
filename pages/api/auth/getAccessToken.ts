@@ -36,6 +36,7 @@ export default async function handler(
       }
     );
     res.status(200).json(response.data);
+    console.log("Getting access token:", response.data);
   } catch (error: any) {
     console.error(
       "Error exchanging code for token:",
