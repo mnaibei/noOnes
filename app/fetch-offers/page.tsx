@@ -96,7 +96,7 @@ function Offers() {
           </select>
         </label>
         <label>
-          Username:
+          User:
           <select
             value={selectedUsername}
             onChange={(e) => setSelectedUsername(e.target.value)}>
