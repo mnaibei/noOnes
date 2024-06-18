@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Offer } from "@/utils/interface/Offer";
+import { UserContext } from "@/utils/UserContext";
 
 function Offers() {
   const [offerType, setOfferType] = useState("buy");
@@ -14,6 +15,15 @@ function Offers() {
   const access_token = Cookies.get("access_token");
   const router = useRouter();
 
+  const [selectedUsername, setSelectedUsername] = useState("");
+  const [userNames, setUserNames] = useState<string[]>([
+    "COIN_X",
+    "JovialCrane953",
+    "Meruchiq",
+  ]);
+
+  const { userInfo } = useContext(UserContext);
+
   const fetchOffers = async () => {
     try {
       const response = await axios.post("/api/offers/getOffers", {
@@ -23,10 +33,21 @@ function Offers() {
           currency_code: currency,
           payment_method: paymentMethod,
           crypto_currency_code: coin,
+          offer_owner_username: selectedUsername,
           limit: 300,
         },
       });
-      setOffers(response.data.data.offers);
+      let fetchedOffers = response.data.data.offers;
+
+      // Filter offers based on selectedUsername
+      if (selectedUsername) {
+        fetchedOffers = fetchedOffers.filter(
+          (offer: { offer_owner_username: string }) =>
+            offer.offer_owner_username === selectedUsername
+        );
+      }
+
+      setOffers(fetchedOffers);
     } catch (error) {
       console.error("Failed to fetch offers:", error);
     }
@@ -69,9 +90,22 @@ function Offers() {
           <select value={coin} onChange={(e) => setCoin(e.target.value)}>
             <option value="">Select</option>
             <option value="btc">Bitcoin</option>
-            <option value="usdt">Tether</option>
+            {/* <option value="usdt">Tether</option>
             <option value="usdc">USD Coin</option>
-            <option value="eth">Ethereum</option>
+            <option value="eth">Ethereum</option> */}
+          </select>
+        </label>
+        <label>
+          Username:
+          <select
+            value={selectedUsername}
+            onChange={(e) => setSelectedUsername(e.target.value)}>
+            <option value="">Select</option>
+            {userNames.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
           </select>
         </label>
         <button
