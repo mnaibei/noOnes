@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -8,11 +8,11 @@ import { Offer } from "@/utils/interface/Offer";
 function OffersList() {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [offerType, setOfferType] = useState<"buy" | "sell">("buy");
-  const accessToken = Cookies.get("access_token");
   const router = useRouter();
 
   useEffect(() => {
     const fetchOffers = async () => {
+      const accessToken = Cookies.get("access_token"); // Fetch the latest access token from cookies
       try {
         const response = await axios.post("/api/offers/listOffers", {
           accessToken: accessToken,
@@ -20,6 +20,11 @@ function OffersList() {
 
         if (response.data.status === "success") {
           setOffers(response.data.data.offers);
+        } else if (
+          response.data.status === "error" &&
+          response.data.message === "Invalid token"
+        ) {
+          // Handle invalid token case here if needed
         }
       } catch (error) {
         console.error("Failed to fetch offers:", error);
@@ -34,6 +39,7 @@ function OffersList() {
   }, []);
 
   const deleteOffer = async (offer_hash: string) => {
+    const accessToken = Cookies.get("access_token"); // Fetch the latest access token from cookies
     try {
       console.log("Deleting offer:", offer_hash);
       const response = await axios.post("/api/offers/deleteOffer", {
@@ -47,6 +53,11 @@ function OffersList() {
         setOffers((prevOffers) =>
           prevOffers.filter((offer) => offer.offer_hash !== offer_hash)
         );
+      } else if (
+        response.data.status === "error" &&
+        response.data.message === "Invalid token"
+      ) {
+        // Handle invalid token case here if needed
       }
     } catch (error) {
       console.error("Failed to delete offer:", error);

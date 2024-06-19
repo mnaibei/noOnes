@@ -6,7 +6,7 @@ import OffersList from "./list-users-offers/page";
 import { UserContext } from "@/utils/UserContext";
 import UserTrades from "./get-user-trades/page";
 import ActiveTrades from "./active-trades/page";
-import { QRCodeSVG, QRCodeCanvas } from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function Home() {
   const { userInfo } = useContext(UserContext);

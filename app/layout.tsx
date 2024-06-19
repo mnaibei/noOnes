@@ -22,15 +22,42 @@ export default function RootLayout({
   const logout = async () => {
     await router.push("/login");
     Cookies.remove("access_token");
+    Cookies.remove("refresh_token");
+    Cookies.remove("token_expiry");
     setAccessToken(undefined);
-    setUserInfo(null); // clear user info
-    setWalletSummary(null); // clear wallet summary
-    setAffiliateSummary(null); // clear affiliate summary
+    setUserInfo(null);
+    setWalletSummary(null);
+    setAffiliateSummary(null);
   };
 
   const api = axios.create();
 
   useEffect(() => {
+    const refreshToken = async () => {
+      const storedRefreshToken = Cookies.get("refresh_token");
+      console.log("Stored refresh token:", storedRefreshToken);
+      if (!storedRefreshToken) return;
+
+      try {
+        const response = await api.post("/api/auth/refreshAccessToken", {
+          refreshToken: storedRefreshToken,
+        });
+        const newAccessToken = response.data.access_token;
+        const newRefreshToken = response.data.refresh_token; // get new refresh token if available
+        const expiresIn = response.data.expires_in;
+        const tokenExpiry = Date.now() + expiresIn * 1000;
+        Cookies.set("access_token", newAccessToken);
+        Cookies.set("token_expiry", tokenExpiry.toString());
+        if (newRefreshToken) {
+          Cookies.set("refresh_token", newRefreshToken); // update refresh token if a new one is provided
+        }
+        setAccessToken(newAccessToken);
+      } catch (error) {
+        console.error("Failed to refresh access token:", error);
+        logout();
+      }
+    };
+
     const fetchData = async () => {
       const code = new URL(window.location.href).searchParams.get("code");
 
@@ -38,7 +65,12 @@ export default function RootLayout({
         try {
           const response = await api.post("/api/auth/getAccessToken", { code });
           const accessToken = response.data.access_token;
+          const refreshToken = response.data.refresh_token;
+          const expiresIn = response.data.expires_in;
+          const tokenExpiry = Date.now() + expiresIn * 1000;
           Cookies.set("access_token", accessToken);
+          Cookies.set("refresh_token", refreshToken);
+          Cookies.set("token_expiry", tokenExpiry.toString());
           setAccessToken(accessToken);
         } catch (error) {
           console.error("Error fetching access token:", error);
@@ -55,35 +87,40 @@ export default function RootLayout({
           const walletSummaryResponse = await api.get(
             "/api/wallet/getWalletSummary",
             {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
+              headers: { Authorization: `Bearer ${accessToken}` },
             }
           );
           setWalletSummary(walletSummaryResponse.data);
-          console.log("Wallet summary:", walletSummaryResponse.data);
 
           const affiliateSummaryResponse = await api.post(
             "/api/affiliate/getAffiliateSummary",
             {},
             {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
+              headers: { Authorization: `Bearer ${accessToken}` },
             }
           );
           setAffiliateSummary(affiliateSummaryResponse.data);
-          console.log("Affiliate summary:", affiliateSummaryResponse.data);
-        } catch (error) {
-          console.error(
-            "Error fetching user info or wallet summary or affiliate summary:",
-            error
-          );
+        } catch (error: any) {
+          if (error.response?.status === 401) {
+            await refreshToken();
+          } else {
+            console.error("Error fetching data:", error);
+          }
         }
       }
     };
 
     fetchData();
+
+    const intervalId = setInterval(async () => {
+      const tokenExpiry = parseInt(Cookies.get("token_expiry") || "0");
+      if (Date.now() >= tokenExpiry - 5 * 60 * 1000) {
+        // Refresh token 5 minutes before expiry
+        await refreshToken();
+      }
+    }, 60 * 1000); // Check every minute
+
+    return () => clearInterval(intervalId);
   }, [accessToken]);
 
   return (

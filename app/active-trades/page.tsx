@@ -9,9 +9,9 @@ export default function ActiveTrades() {
   const { userInfo } = useContext(UserContext);
   const [activeTrades, setActiveTrades] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const accessToken = Cookies.get("access_token");
   const router = useRouter();
 
+  const accessToken = Cookies.get("access_token");
   const fetchActiveTrades = async () => {
     if (accessToken) {
       try {
@@ -37,7 +37,7 @@ export default function ActiveTrades() {
   useEffect(() => {
     fetchActiveTrades(); // fetch immediately on component mount
 
-    const intervalId = setInterval(fetchActiveTrades, 5000); // fetch every 5 seconds
+    const intervalId = setInterval(fetchActiveTrades, 45000); // fetch every 5 seconds
 
     return () => {
       clearInterval(intervalId); // clear interval on component unmount
