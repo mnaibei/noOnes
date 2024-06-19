@@ -3,10 +3,16 @@ import { useRouter } from "next/navigation";
 interface UserNavProps {
   userInfo: any;
   walletSummary: any;
+  affiliateSummary: any;
   onLogout: () => void;
 }
 
-const Nav: React.FC<UserNavProps> = ({ userInfo, walletSummary, onLogout }) => {
+const Nav: React.FC<UserNavProps> = ({
+  userInfo,
+  walletSummary,
+  affiliateSummary,
+  onLogout,
+}) => {
   const router = useRouter();
 
   return (
@@ -37,7 +43,7 @@ const Nav: React.FC<UserNavProps> = ({ userInfo, walletSummary, onLogout }) => {
           </span>
         </p>
         {walletSummary && (
-          <div className="flex flex-col gap-2 justify-center">
+          <div className="flex flex-col gap-2 justify-center p-2">
             <p className="font-bold text-xl">
               {Number(walletSummary.total_market_value).toLocaleString(
                 undefined,
@@ -52,6 +58,20 @@ const Nav: React.FC<UserNavProps> = ({ userInfo, walletSummary, onLogout }) => {
                 </li>
               ))}
             </ul>
+            {affiliateSummary && (
+              <div>
+                <p>
+                  Affiliate balance:{" "}
+                  {Number(
+                    affiliateSummary.data.affiliate_balance
+                  ).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
+                  {affiliateSummary.data.fiat_currency_code}
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>

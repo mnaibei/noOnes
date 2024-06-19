@@ -16,6 +16,7 @@ export default function RootLayout({
   );
   const [userInfo, setUserInfo] = useState<any>(null);
   const [walletSummary, setWalletSummary] = useState<any>(null);
+  const [affiliateSummary, setAffiliateSummary] = useState<any>(null);
   const router = useRouter();
 
   const logout = async () => {
@@ -24,6 +25,7 @@ export default function RootLayout({
     setAccessToken(undefined);
     setUserInfo(null); // clear user info
     setWalletSummary(null); // clear wallet summary
+    setAffiliateSummary(null); // clear affiliate summary
   };
 
   const api = axios.create();
@@ -60,8 +62,23 @@ export default function RootLayout({
           );
           setWalletSummary(walletSummaryResponse.data);
           console.log("Wallet summary:", walletSummaryResponse.data);
+
+          const affiliateSummaryResponse = await api.post(
+            "/api/affiliate/getAffiliateSummary",
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          setAffiliateSummary(affiliateSummaryResponse.data);
+          console.log("Affiliate summary:", affiliateSummaryResponse.data);
         } catch (error) {
-          console.error("Error fetching user info or wallet summary:", error);
+          console.error(
+            "Error fetching user info or wallet summary or affiliate summary:",
+            error
+          );
         }
       }
     };
@@ -81,6 +98,7 @@ export default function RootLayout({
               userInfo={userInfo}
               onLogout={logout}
               walletSummary={walletSummary}
+              affiliateSummary={affiliateSummary}
             />
           )}
           {children}
